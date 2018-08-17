@@ -1,0 +1,57 @@
+[
+	{
+		"url": "http://www.10jqka.com.cn",
+		"before": [
+			{"event": "click", "dom": "#tab1", "wait_time": "500", "wait_dom": "#wrap"},
+			{"event": "click", "dom": "#tab1", "wait_dom": "#wrap"},
+			{"event": "click", "dom": "#tab1", "wait_time": "500"}
+		],
+		"table_dom": {
+			"thead_dom": "#table",
+			"tbody_dom": "#table"
+		},
+		"table_cell": {
+			"代码": {
+				"fixed": "false",
+				"color": "false",
+				"unit": "false",
+				"sort": {"wait_time": "500"},
+				"empty": "--"
+			},
+			"涨幅": {
+				"fixed": "2",
+				"color": "true",
+				"unit": "%",
+				"sort": {"wait_time": "500"},
+				"empty": "--"
+			},
+			"总市值": {
+				"fixed": "2",
+				"color": "false",
+				"unit": "true",
+				"sort": "false",
+				"empty": "--"
+			}
+		},
+		"table_empty": "1,2,3"
+	},
+	{
+		"url": "http://vis.10jqka.com.cn",
+		"table_dom": {
+			"thead_dom": "#table",
+			"tbody_dom": "#table"
+		},
+		"table_cell": { 
+			"代码": {
+				"sort": {"wait_time": "500"}
+			}, "涨幅": {
+				"fixed": "2",
+				"color": "true",
+				"unit": "%",
+				"sort": {"wait_time": "500"}
+			}
+		},
+		"table_empty": "1,2,3"
+	}
+
+]

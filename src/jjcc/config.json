@@ -1,0 +1,28 @@
+{
+    "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
+    "before": [
+        {"event": "click", "dom": ".item-content:nth-child(2)", "wait_time": "500"}
+    ],
+    "table_dom": "#mid .hq_table_base",
+    "table_cell":
+    {
+        "代码":
+        {
+            "sort":
+            {
+                "wait_time": "500"
+            }
+        },
+        "涨幅":
+        {
+            "fixed": "2",
+            "color": "true",
+            "unit": "%",
+            "sort":
+            {
+                "wait_time": "500"
+            }
+        }
+    },
+    "table_empty": "1,2,3"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "table_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/index.js",
+  "scripts": {
+    "test_dev": "nightwatch --config bin/nightwatch.conf.js",
+    "test_jjcc": "node bin/startup.js --conf src/jjcc/config.json",
+    "nightwatch": "nightwatch --config bin/nightwatch.conf.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "bluebird": "^3.5.1",
+    "chromedriver": "^2.41.0",
+    "colors": "^1.3.1",
+    "env2": "^2.2.2",
+    "lodash": "^4.17.10",
+    "minimist": "^1.2.0",
+    "nightwatch": "^0.9.21",
+    "node-cmd": "^3.0.0",
+    "selenium-server": "^3.14.0"
+  }
+}
