@@ -42,11 +42,12 @@ function beforeFindTable(browser) {
 }
 
 function findTable(browser) {
-  // TODO 将节点都存储下来
-  // TODO 对数据进行处理分发
-  
+  Util.statusLog('开始进行表格数据处理')
+  getTableElements(browser, (data) => {
+    console.log(999)
+    Cel.initData(data)
+  })
 
-  Cel.data = []
   Empty.data = []
 
 
@@ -64,6 +65,83 @@ function findTable(browser) {
  //      console.log(data)
  //    });
 }
+
+/*
+ * 返回table封装后的节点坐标
+ * 数据格式：
+ * {
+ *   '列名'： {
+ *     thead: x,
+ *     tbody: ['x,y', 'x,y' ...]
+ *   },
+ * }
+ */
+function getTableElements (browser, callback) {
+  // 确定thead内使用的是th还是td
+  checkTheadChildTag(browser, app['table_dom']['thead_dom'], function (theadChildTag) {
+    browser.execute(function (app, theadChildTag) {
+      let element = {}
+      let theadDom = document.querySelectorAll(app['table_dom']['thead_dom'] + ' ' + theadChildTag)
+      let tbodyDom = document.querySelectorAll(app['table_dom']['tbody_dom'] + ' tr')
+      let theadName = [] // 用于存放表格的标题，与app['table_cell']的key值对应
+      for (let i = 0; i < theadDom.length; i++) {
+        let colName = theadDom[i].innerText
+        theadName.push(colName)
+        if (!element[colName]) {
+          element[colName] = {
+            thead: i
+          }
+        }
+      }
+      for (let i = 0; i < tbodyDom.length; i++) {
+        for (let j = 0; j < tbodyDom[i].children.length; j++) {
+          let colName = theadName[j]
+          if (!element[colName].tbody) {
+            element[colName].tbody = []
+          }
+          element[colName].tbody.push(i + ',' + j)
+        }
+      }
+      return element
+    }, [app, theadChildTag], function (data) {
+      Util.successLog('封装后的表格对象为：')
+      console.log(data.value)
+      callback(data.value)
+    })
+  })
+}
+
+// 用于判断thead的子节点是th还是td
+function checkTheadChildTag (browser, Thead, callback) {
+  let [td, th] = [0, 0]
+  let tag = ''
+  browser.element('css selector', Thead + ' td', function (res) {
+    td = 1
+    if (res.status == 0) {
+      tag = 'td'
+    }
+    call()
+  })
+  browser.element('css selector', Thead + ' th', function (res) {
+    th = 1
+    if (res.status == 0) {
+      tag = 'th'
+    }
+    call()
+  })
+  function call () {
+    if (td && tag != '') {
+      Util.successLog('thead的子节点标签是td')
+      callback(tag)
+    } else if (th && tag != '') {
+      Util.successLog('thead的子节点标签是th')
+      callback(tag)
+    } else if (td && th) {
+      Util.errorLog('thead中没有th和td!')
+    }
+  }
+}
+
 
 function end (browser) {
   // browser.end()
