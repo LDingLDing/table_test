@@ -42,33 +42,40 @@ function checkConf (item) {
 function startup (confPath) {
   const CONFIG = require(confPath)
   const apps = _.isArray(CONFIG) ? CONFIG : [CONFIG]
+  const tmpDir = path.resolve(__dirname, './tmp/')
+  const configFile = path.resolve(tmpDir, '.config.json')
 
   let run = function (count) {
     let item = apps[count]
     if (!item) return
 
     item = checkConf(item)
-    fs.writeFile(path.resolve(__dirname, './tmp/config.json'), JSON.stringify(item), err => {
-      if (err) {
-        console.log(err)
-      }
-      console.log('\n', '>> Start table case '.cyan, item['table_dom']['tbody_dom'].bold.cyan);
-      //? 无法直接调用nightwatch起程序
-      //? 无法通过node_modules中其程序
-      // cmd.run('node_modules/.bin/nightwatch --config bin/nightwatch.conf.js')
-      
-      const processRef = cmd.get('npm run nightwatch')
 
-      let data_line = ''
-      processRef.stdout.on(
-        'data'
-      , data => {
-        console.log(data)
+    fs.mkdir(tmpDir, err => {
+      fs.writeFile(configFile, JSON.stringify(item), err => {
+        if (err) {
+          console.log(err)
+          return
+        }
+        console.log('\n', '>> Start table case '.cyan, item['table_dom']['tbody_dom'].bold.cyan);
+        //? 无法直接调用nightwatch起程序
+        //? 无法通过node_modules中其程序
+        // cmd.run('node_modules/.bin/nightwatch --config bin/nightwatch.conf.js')
+        
+        const processRef = cmd.get('npm run nightwatch')
+  
+        let data_line = ''
+        processRef.stdout.on(
+          'data'
+        , data => {
+          console.log(data)
+        })
+  
+        processRef.on('close', code => {
+          run(++count)
+        })
       })
 
-      processRef.on('close', code => {
-        run(++count)
-      })
     })
   }
 
