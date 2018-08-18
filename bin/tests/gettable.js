@@ -22,7 +22,10 @@ function beforeFindTable(browser) {
 
   let action = function (i) {
     const op = ops[i]
-    if (!op) return
+    if (!op) {
+      findTable(browser)
+      return
+    }
     
     browser
       .waitForElementVisible(op.dom)
@@ -48,7 +51,7 @@ function findTable(browser) {
     Cel.initData(data)
   })
 
-  Empty.data = []
+  // Empty.data = []
 
 
 	// const $thead = browser
@@ -144,7 +147,7 @@ function checkTheadChildTag (browser, Thead, callback) {
 
 
 function end (browser) {
-  // browser.end()
+  browser.end()
 }
 
 

@@ -36,6 +36,11 @@ function checkConf (item) {
     !item.thead_dom && Util.logNecessary('table_dom.thead_dom')
     !item.tbody_dom && Util.logNecessary('table_dom.tbody_dom')
   }
+  // before.wait_time
+  item['before'] = item['before'] || []
+  for (let op of item['before']) {
+    op['wait_time'] = Number(op['wait_time']) || 0
+  }
   return item
 }
 
@@ -43,7 +48,7 @@ function startup (confPath) {
   const CONFIG = require(confPath)
   const apps = _.isArray(CONFIG) ? CONFIG : [CONFIG]
   const tmpDir = path.resolve(__dirname, './tmp/')
-  const configFile = path.resolve(tmpDir, '.config.json')
+  const configFile = path.resolve(tmpDir, './config.json')
 
   let run = function (count) {
     let item = apps[count]
