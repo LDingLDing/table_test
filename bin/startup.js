@@ -47,7 +47,7 @@ function checkConf (item) {
 function startup (confPath) {
   const CONFIG = require(confPath)
   const apps = _.isArray(CONFIG) ? CONFIG : [CONFIG]
-  const tmpDir = path.resolve(__dirname, './tmp/')
+  const tmpDir = Util.tmpDir
   const configFile = path.resolve(tmpDir, './config.json')
 
   let run = function (count) {

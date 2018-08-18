@@ -1,6 +1,8 @@
+const path = require('path')
 const colors = require('colors')
 
 module.exports = {
+	tmpDir: path.resolve(__dirname, './tmp/'),
 	logNecessary (key) {
 		console.log(colors.red('【ERROR】: [%s] is necessary!'), key)
 		process.exit()

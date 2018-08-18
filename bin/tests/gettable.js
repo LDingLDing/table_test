@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 const app = require(path.resolve(__dirname, '../tmp/config.json'))
 const Util = require(path.resolve(__dirname, '../util'))
 
@@ -47,26 +48,8 @@ function beforeFindTable(browser) {
 function findTable(browser) {
   Util.statusLog('开始进行表格数据处理')
   getTableElements(browser, (data) => {
-    console.log(999)
     Cel.initData(data)
   })
-
-  // Empty.data = []
-
-
-	// const $thead = browser
- //    .waitForElementVisible(app['table_dom']['thead_dom'])
- //    .element('css selector', app['table_dom']['thead_dom'])
-
- //  const $tbody = browser
- //    .waitForElementVisible(app['table_dom']['tbody_dom'])
- //    .element('css selector', app['table_dom']['tbody_dom'])
-
- //    browser.execute(function(data) {
- //       return '123';
- //    }, [], data => {
- //      console.log(data)
- //    });
 }
 
 /*
@@ -107,8 +90,9 @@ function getTableElements (browser, callback) {
       }
       return element
     }, [app, theadChildTag], function (data) {
-      Util.successLog('封装后的表格对象为：')
-      console.log(data.value)
+      let file = path.resolve(Util.tmpDir, './tableEle.json')
+      Util.successLog('封装后的表格对象为：见' + file)
+      fs.writeFile(file, JSON.stringify(data))
       callback(data.value)
     })
   })

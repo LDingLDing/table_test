@@ -9,7 +9,7 @@ let cel = {
   },
   doTest (browser) {
     console.log('---------------------------------1------------------------------')
-    console.log(this.data)
+    // console.log(this.data)
     // getTableElements(browser, (tableElements) => {
     //   for (let colName in tableElements) {
     //   	Util.statusLog('开始验证表格【'+colName+'】列：');
