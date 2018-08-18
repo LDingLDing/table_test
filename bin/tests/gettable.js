@@ -13,9 +13,10 @@ function openUrl(browser) {
 
   if (app.before) {
     beforeFindTable(browser)
-  } else {
-  	findTable(browser)
-  }
+  } 
+  // else {
+  // 	findTable(browser)
+  // }
 };
 
 function beforeFindTable(browser) {
@@ -24,7 +25,7 @@ function beforeFindTable(browser) {
   let action = function (i) {
     const op = ops[i]
     if (!op) {
-      findTable(browser)
+      // findTable(browser)
       return
     }
     
@@ -46,9 +47,14 @@ function beforeFindTable(browser) {
 }
 
 function findTable(browser) {
-  Util.statusLog('开始进行表格数据处理')
+  browser.waitForElementVisible(app['table_dom']['thead_dom'])
+  browser.waitForElementVisible(app['table_dom']['tbody_dom'])
+}
+
+function initData (browser) {
   getTableElements(browser, (data) => {
     Cel.initData(data)
+    Empty.initData(data)
   })
 }
 
@@ -124,7 +130,7 @@ function checkTheadChildTag (browser, Thead, callback) {
       Util.successLog('thead的子节点标签是th')
       callback(tag)
     } else if (td && th) {
-      Util.errorLog('thead中没有th和td!')
+      Util.errorLog('未获取到 '+ Thead + ' th ' +'的内容！')
     }
   }
 }
@@ -136,9 +142,11 @@ function end (browser) {
 
 
 let obj = {
-  '获取表格': openUrl
+  '打开网址&前置操作': openUrl,
+  '获取表格/表格是否有内容': findTable,
+  '开始进行表格数据处理': initData
 }
-app['table_empty'] && (obj['空验证'] = Empty.doTest)
+app['table_empty'] && (obj = Object.assign(obj, Empty.doTest || {}))
 app['table_cell'] && (obj['单元格验证'] = Cel.doTest)
 
 obj['关闭'] = end
