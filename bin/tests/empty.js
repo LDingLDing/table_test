@@ -1,6 +1,5 @@
 const path = require('path')
 const fs = require('fs')
-const expect = require('chai').expect
 const app = require(path.resolve(__dirname, '../tmp/config.json'))
 const Util = require(path.resolve(__dirname, '../util'))
 let data
