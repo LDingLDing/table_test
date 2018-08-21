@@ -52,17 +52,18 @@ function checkCel(browser) {
 
 		for (let j = 0; j < $ths.length; j++) {
 			for (let i = 0; i < $trs.length; i++) {
-				data[j].data.push($trs[i].querySelector('td:nth-child('+ (j+1) +')').innerText)
+				let $td = $trs[i].querySelector('td:nth-child('+ (j+1) +')')
+				data[j].data.push($td && $td.innerText || 'may be colspan')
 			}
 		}
 		return data
 	}, [app['table_dom']['thead_dom'], app['table_dom']['tbody_dom']], function(rst) {
 		let colsEmpty = []
 		for (let c in rst.value) {
-			let cols = rst.value.data
+			let cols = rst.value[c].data
 			let arr = []
 			for (let r in cols) {
-				if (isEmpty[cols[r]]) {
+				if (isEmpty(cols[r])) {
 					arr.push(r)
 				}
 			}
@@ -76,12 +77,12 @@ function checkCel(browser) {
 				Util.errorLog('第' + (+c+1) + '列['+ rst.value[c].name +']中以下几行数据为空 -> [' + arr.join(',') + ']')
 			}
 		}
-		// fs.writeFile('bin/tmp/t.json', JSON.stringify(rst.value))
+		fs.writeFile('bin/tmp/t.json', JSON.stringify(rst.value))
 	})
 }
 function isEmpty(str) {
 	str = str + ''
-	return emptyStr.contains(str.trim())
+	return !!~emptyStr.indexOf(str.trim())
 }
 
 module.exports = {

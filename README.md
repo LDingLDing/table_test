@@ -75,7 +75,7 @@ src/jjcc/config.json
     "table_empty": true
 }
 ```
-具体见[config.json配置](#config.json)
+具体见[config.json配置](#configjson)
 
 ### 运行测试程序
 控制台目录切换到当前`table_test`目录下（根目录），运行如下命令（在前面你添加的快速启动命令）
