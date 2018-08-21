@@ -81,7 +81,10 @@ function getTableElements (browser, callback) {
         theadName.push(colName)
         if (!element[colName]) {
           element[colName] = {
-            thead: i
+            thead: {
+              index: i,
+              tag: theadChildTag
+            }
           }
         }
       }
