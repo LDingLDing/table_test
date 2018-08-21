@@ -53,7 +53,7 @@ function checkCel(browser) {
 		for (let j = 0; j < $ths.length; j++) {
 			for (let i = 0; i < $trs.length; i++) {
 				let $td = $trs[i].querySelector('td:nth-child('+ (j+1) +')')
-				data[j].data.push($td && $td.innerText || 'may be colspan')
+				data[j].data.push($td ? $td.innerText : 'may be colspan')
 			}
 		}
 		return data
@@ -77,7 +77,7 @@ function checkCel(browser) {
 				Util.errorLog('第' + (+c+1) + '列['+ rst.value[c].name +']中以下几行数据为空 -> [' + arr.join(',') + ']')
 			}
 		}
-		fs.writeFile('bin/tmp/t.json', JSON.stringify(rst.value))
+		// fs.writeFile('bin/tmp/t.json', JSON.stringify(rst.value))
 	})
 }
 function isEmpty(str) {
