@@ -34,9 +34,9 @@ function checkTbody (browser) {
 		return !!$tds
 	}, [app['table_dom']['tbody_dom']], function(rst) {
 		if (rst.value) {
-			browser.verify.equal(rst.value, true)
+			browser.verify.equal(rst.value, true, '表格存在')
 		} else {
-			browser.expect.element(app['table_dom']['tbody_dom']).text.not.equal('')
+			browser.expect.element(app['table_dom']['tbody_dom']).text.not.equal('', '表格存在')
 		}
 	});
 }
@@ -59,6 +59,7 @@ function checkCel(browser) {
 		return data
 	}, [app['table_dom']['thead_dom'], app['table_dom']['tbody_dom']], function(rst) {
 		let colsEmpty = []
+		
 		for (let c in rst.value) {
 			let cols = rst.value[c].data
 			let arr = []
@@ -68,9 +69,8 @@ function checkCel(browser) {
 				}
 			}
 			colsEmpty.push(arr)
-			browser.verify.equal(arr.length, 0)
+			browser.verify.equal(arr.length, 0 , '第' + (+c+1) + '列['+ rst.value[c].name +']数据都存在')
 			if (!arr.length) {
-				Util.successLog('第' + (+c+1) + '列['+ rst.value[c].name +']数据都存在')
 			} else if (arr.length === rst.value[c].data.length) {
 				Util.errorLog('第' + (+c+1) + '列['+ rst.value[c].name +']数据全空')
 			} else {
