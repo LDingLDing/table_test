@@ -60,7 +60,7 @@ function doTest(browser) {
       }
       return colData
     }, [app['table_dom']['tbody_dom'], colIndex], function (data) {
-      console.log(data)
+		  // fs.writeFile('bin/tmp/cel.json', JSON.stringify(data))
       if (data.status != 0) {
         return
       }
