@@ -47,4 +47,18 @@
         "昨日增持":{"sort": true, "unit": "只"}
     },
     "table_empty": true
+},{
+    "suite": "全部持仓",
+    "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
+    "table_dom": { "thead_dom": "#tableRight .hq_table_tablefixed thead", "tbody_dom": "#tableRight .hq_table_base tbody"},
+    "table_cell": {
+        "持仓市值": { "unit": true, "fixed": "2", "sort": { "wait_time": "2000"}},
+        "持仓成本": { "color": true, "sort": { "wait_time": "2000"}},
+        "持仓盈亏比":{ "fixed": "2", "color": true, "unit": "%", "sort": { "wait_time": "2000"}},
+        "持仓量":{ "unit": true, "sort": { "wait_time": "2000"}},
+        "占仓比":{"color": true, "unit": "%", "sort": { "wait_time": "2000"}},
+        "连续增持":{"color": true, "unit": "天", "sort": { "wait_time": "2000"}},
+        "调仓幅度":{"color": true, "unit": "%", "sort": { "wait_time": "2000"}}
+    },
+    "table_empty": true
 }]
