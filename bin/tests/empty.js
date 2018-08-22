@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const app = require(path.resolve(__dirname, '../tmp/config.json'))
 const Util = require(path.resolve(__dirname, '../util'))
+let app
 let data
 let doTest = {
 	'空值检查:是否有数据': checkTbody,
@@ -21,8 +21,12 @@ let emptyStr = ['--', '-', '']
 * 有无内容提示
 */
 
-function initData(data) {
-	data = data
+function initData(value) {
+	data = value
+}
+
+function initApp(value) {
+	app = value
 }
 
 function checkTbody (browser) {
@@ -89,5 +93,6 @@ function isEmpty(str) {
 module.exports = {
 	'doTest': doTest,
 	'isEmpty': isEmpty,
-	'initData': initData
+	'initData': initData,
+	'initApp': initApp
 }

@@ -1,4 +1,5 @@
 [{
+    "suite": "左侧前3个表格",
     "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
     "table_dom": { "thead_dom": "#mid .hq_table_theadfixed thead", "tbody_dom": "#mid .hq_table_base tbody"},
     "table_cell": {
@@ -13,13 +14,15 @@
     },
     "table_empty": true
 }, {
+    "suite": "抱团实力 左上",
     "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
     "before": [
         {"event": "click", "dom": ".item-content:nth-child(4)", "wait_time": "5000"}
     ],
-    "table_dom": { "thead_dom": ".best-box .hq_table_theadfixed thead", "tbody_dom": ".best-box .hq_tbody_base tbody"},
+    "table_dom": { "thead_dom": ".best-box .hq_table_theadfixed thead", "tbody_dom": ".best-box .hq_container_base tbody"},
     "table_empty": true
 }, {
+    "suite": "抱团实力 左下",
     "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
     "before": [
         {"event": "click", "dom": ".item-content:nth-child(4)", "wait_time": "5000"}
@@ -27,6 +30,7 @@
     "table_dom": { "thead_dom": "#otherTable .hq_table_theadfixed thead", "tbody_dom": "#otherTable .hq_table_base tbody"},
     "table_empty": true
 }, {
+    "suite": "明星经纪商",
     "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
     "before": [
         {"event": "click", "dom": ".item-content:nth-child(5)", "wait_time": "5000"}

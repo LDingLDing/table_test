@@ -1,10 +1,11 @@
 const path = require('path')
 const fs = require('fs')
-const app = require(path.resolve(__dirname, '../tmp/config.json'))
+const app = require(path.resolve(__dirname, '../tmp/${confPath}$'))
 const Util = require(path.resolve(__dirname, '../util'))
 
-const Cel = require('./cel')
-const Empty = require('./empty')
+const Cel = require('../tests/cel')
+const Empty = require('../tests/empty')
+
 
 function openUrl(browser) {
   browser
@@ -49,6 +50,11 @@ function beforeFindTable(browser) {
 function findTable(browser) {
   browser.waitForElementVisible(app['table_dom']['thead_dom'])
   browser.waitForElementVisible(app['table_dom']['tbody_dom'])
+}
+
+function initApp () {
+  Cel.initApp(app)
+  Empty.initApp(app)
 }
 
 function initData (browser) {
@@ -143,6 +149,7 @@ function end (browser) {
   browser.end()
 }
 
+initApp(app)
 
 let obj = {
   '打开网址&前置操作': openUrl,

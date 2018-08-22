@@ -3,3 +3,4 @@ node_modules/
 screenshots/
 reports
 bin/tmp/
+bin/run/

@@ -1,12 +1,16 @@
 const path = require('path')
-const app = require(path.resolve(__dirname, '../tmp/config.json'))
 const Util = require(path.resolve(__dirname, '../util'))
-
 const Empty = require('./empty')
-let tableElements = void 0
+
+let app
+let tableElements
 
 function initData(data) {
   tableElements = data
+}
+
+function initApp(value) {
+	app = value
 }
 
 function doTest(browser) {
@@ -105,5 +109,6 @@ function doTest(browser) {
 
 module.exports = {
   initData: initData,
+  initApp: initApp,
   doTest: doTest
 }

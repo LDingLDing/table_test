@@ -5,6 +5,7 @@ const colors = require('colors')
 const cmd = require('node-cmd')
 const argv = require('minimist')(process.argv.slice(2))
 const Promise = require('bluebird')
+const rimraf = require('rimraf')
 const getAsync = Promise.promisify(cmd.get, { multiArgs: true, context: cmd })
 const Util = require(path.resolve(__dirname, './util'))
 const NightwatchConf = require(path.resolve(__dirname, './nightwatch.conf.js'))
@@ -48,41 +49,56 @@ function startup (confPath) {
   const CONFIG = require(confPath)
   const apps = _.isArray(CONFIG) ? CONFIG : [CONFIG]
   const tmpDir = Util.tmpDir
-  const configFile = path.resolve(tmpDir, './config.json')
+  let testFileContent
+
+  for (let i in apps) {
+    apps[i] = checkConf(apps[i])
+  }
 
   let run = function (count) {
     let item = apps[count]
-    if (!item) return
+    let configFile = path.resolve(tmpDir, './config'+ (+count+1) +'.json')
+    
+    if (!item) {
+      // console.log('\n', '>> Start table case '.cyan, item['table_dom']['tbody_dom'].bold.cyan);
+      //? 无法直接调用nightwatch起程序
+      //? 无法通过node_modules中其程序
+      // cmd.run('node_modules/.bin/nightwatch --config bin/nightwatch.conf.js')
+      
+      const processRef = cmd.get('npm run nightwatch')
 
-    item = checkConf(item)
-
-    fs.mkdir(tmpDir, err => {
-      fs.writeFile(configFile, JSON.stringify(item), err => {
-        if (err) {
-          console.log(err)
-          return
-        }
-        console.log('\n', '>> Start table case '.cyan, item['table_dom']['tbody_dom'].bold.cyan);
-        //? 无法直接调用nightwatch起程序
-        //? 无法通过node_modules中其程序
-        // cmd.run('node_modules/.bin/nightwatch --config bin/nightwatch.conf.js')
-        
-        const processRef = cmd.get('npm run nightwatch')
-  
-        let data_line = ''
-        processRef.stdout.on(
-          'data'
-        , data => {
-          console.log(data)
-        })
-  
-        processRef.on('close', code => {
-          run(++count)
-        })
+      let data_line = ''
+      processRef.stdout.on(
+        'data'
+      , data => {
+        console.log(data)
       })
 
-    })
+      processRef.on('close', code => {
+        rimraf(tmpDir, () => {})
+        rimraf(path.resolve(__dirname, './run'), () => {})
+      })
+
+      return
+    }
+
+    try {
+      fs.mkdirSync(tmpDir)
+    } catch(e) {}
+    fs.writeFileSync(configFile,  JSON.stringify(item))
+    try {
+      fs.mkdirSync(path.resolve(__dirname, './run'))
+    } catch(e) {}
+    let fileName = item.suite || 'gettable' + (+count+1)
+    fs.writeFileSync(
+      path.resolve(__dirname, './run/' + fileName + '.js'),
+      testFileContent.replace('${confPath}$', 'config'+ (+count+1) +'.json')
+    )
+    
+    run (count + 1)
   }
 
-  run(0)
+  testFileContent = fs.readFileSync(path.resolve(__dirname, './tests/gettable.js'), 'utf8' )
+  testFileContent && run(0)
 }
+
