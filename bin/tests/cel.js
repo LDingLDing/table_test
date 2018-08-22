@@ -77,22 +77,26 @@ function doTest(browser) {
       if (app['table_cell'][colName]['sort']) {
         let theadDom = app['table_dom']['thead_dom'] + ' ' + tableElements[colName].thead.tag + ':nth-child(' + (colIndex + 1) + ')'
         browser
+          .execute(function (selector) {
+              document.querySelector(selector).scrollIntoView();
+          }, [theadDom])
+          .pause(1100)
           .click(theadDom, function (response) {
             if (response.status == 0) {
-              console.log('点击【' + colName + '】表头进行排序')
+              Util.statusLog('点击【' + colName + '】表头进行排序')
             } else
             if (response.status == 13) {
-              console.log('设置的表头节点不是一个可点击的节点')
+              Util.errorLog('设置的表头节点不是一个可点击的节点')
             }
           })
           .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
           .verify.checkSort(app['table_dom']['tbody_dom'], colIndex, colName)
           .click(theadDom, function (response) {
             if (response.status == 0) {
-              console.log('再次点击【' + colName + '】表头进行排序')
+              Util.statusLog('再次点击【' + colName + '】表头进行排序')
             } else
             if (response.status == 13) {
-              console.log('设置的表头节点不是一个可点击的节点')
+              Util.errorLog('设置的表头节点不是一个可点击的节点')
             }
           })
           .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
