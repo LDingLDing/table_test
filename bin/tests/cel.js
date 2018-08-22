@@ -10,7 +10,7 @@ function initData(data) {
 }
 
 function doTest(browser) {
-  console.log('---------------------------------1------------------------------')
+  // console.log('---------------------------------1------------------------------')
   for (let colName in tableElements) {
     if (!app['table_cell'][colName]) {
       continue
@@ -60,7 +60,7 @@ function doTest(browser) {
       }
       return colData
     }, [app['table_dom']['tbody_dom'], colIndex], function (data) {
-		  // fs.writeFile('bin/tmp/cel.json', JSON.stringify(data))
+      // fs.writeFile('bin/tmp/cel.json', JSON.stringify(data))
       if (data.status != 0) {
         return
       }
@@ -74,17 +74,19 @@ function doTest(browser) {
       if (app['table_cell'][colName]['unit']) {
         browser.verify.checkUnit(colData, colName, app['table_cell'][colName]['unit'])
       }
+      if (app['table_cell'][colName]['sort']) {
+        let theadDom = app['table_dom']['thead_dom'] + ' ' + tableElements[colName].thead.tag + ':nth-child(' + (colIndex + 1) + ')'
+        browser.click(theadDom, function (response) {
+            console.log(response)
+            if (response.status == 13) {
+              console.log('设置的表头节点不是一个可点击的节点')
+            }
+          })
+          .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
+          .verify.checkSort(app['table_dom']['tbody_dom'], colIndex, colName)
+      }
     })
 
-    // let theadDom = app['table_dom']['thead_dom'] + ' ' + tableElements[colName].thead.tag + ':nth-child(' + (colIndex + 1) + ')'
-    // if (app['table_cell'][colName]['sort']) {
-    //   let colIndex = parseInt(tableElements[colName].tbody[0].split(',')[1])
-    //   browser.click(theadDom, function (response) {
-    //       console.log(response)
-    //     })
-    //     .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
-    //     .verify.checkSort(app['table_dom']['tbody_dom'], colIndex, colName)
-    // }
   }
 }
 

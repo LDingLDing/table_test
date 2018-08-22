@@ -140,7 +140,7 @@ function checkTheadChildTag (browser, Thead, callback) {
 
 
 function end (browser) {
-  browser.end()
+  // browser.end()
 }
 
 

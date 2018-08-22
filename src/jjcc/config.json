@@ -3,7 +3,10 @@
     "before": [
         {"event": "click", "dom": ".item-content:nth-child(2)", "wait_time": "5000"}
     ],
-    "table_dom": "#mid .hq_table_base",
+    "table_dom": {
+        "thead_dom": "#mid .hq_table_theadfixed thead",
+        "tbody_dom": "#mid .hq_table_base tbody"
+    },
     "table_cell":
     {
         "累计净买入额":

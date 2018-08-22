@@ -1,6 +1,6 @@
 const Empty = require('../tests/empty')
 exports.assertion = function (selector, colIndex, colName) {
-  this.message = '开始验证 <' + selector + '> 表格“' + colName + '”列的排序:'
+  this.message = '验证【' + colName + '】列的排序----'
   this.expected = function () {}
   this.pass = function (data) {
     let isSorted = true
@@ -53,12 +53,12 @@ exports.assertion = function (selector, colIndex, colName) {
         }
       }
       if (sort > 0) {
-        if (preData - realData(val) <= 0) {
+        if (preData - realData(val) < 0) {
           this.message += '\n出现错误：\n错误位置: 第' + (i + 1) + '行\n错误原因: 该列应该是降序，但是第' + (i + 1) + '行的数据('+realData(val)+')比第' + i + '行的数据('+preData+')大！'
           return false
         }
       } else if (sort < 0) {
-        if (preData - realData(val) >= 0) {
+        if (preData - realData(val) > 0) {
           this.message += '\n出现错误：\n错误位置: 第' + (i + 1) + '行\n错误原因: 该列应该是升序，但是第' + (i + 1) + '行的数据('+realData(val)+')比第' + i + '行的数据('+preData+')小！'
           return false
         }

@@ -33,8 +33,8 @@ function checkConf (item) {
       tbody_dom: item['table_dom'] + ' tbody',
     }
   } else {
-    !item.thead_dom && Util.logNecessary('table_dom.thead_dom')
-    !item.tbody_dom && Util.logNecessary('table_dom.tbody_dom')
+    !item.table_dom.thead_dom && Util.logNecessary('table_dom.thead_dom')
+    !item.table_dom.tbody_dom && Util.logNecessary('table_dom.tbody_dom')
   }
   // before.wait_time
   item['before'] = item['before'] || []
