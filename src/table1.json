@@ -1,0 +1,9 @@
+[{
+    "url": "http://localhost:9998/demo1.html",
+    "before": [{
+        "event": "click",
+        "dom": "#as"
+    }],
+    "table_dom": "#table1",
+    "table_empty": true
+}]
