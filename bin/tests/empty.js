@@ -73,13 +73,7 @@ function checkCel(browser) {
 				}
 			}
 			colsEmpty.push(arr)
-			browser.verify.equal(arr.length, 0 , '第' + (+c+1) + '列['+ rst.value[c].name +']数据都存在')
-			if (!arr.length) {
-			} else if (arr.length === rst.value[c].data.length) {
-				Util.errorLog('第' + (+c+1) + '列['+ rst.value[c].name +']数据全空')
-			} else {
-				Util.errorLog('第' + (+c+1) + '列['+ rst.value[c].name +']中以下几行数据为空 -> [' + arr.join(',') + ']')
-			}
+			browser.verify.checkCelEmpty(arr, c, rst.value)
 		}
 		// fs.writeFile('bin/tmp/t.json', JSON.stringify(rst.value))
 	})
