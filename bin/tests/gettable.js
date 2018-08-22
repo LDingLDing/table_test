@@ -31,7 +31,7 @@ function beforeFindTable(browser) {
     
     browser
       .waitForElementVisible(op.dom)
-    browser[op.event](op.dom)
+    browser[Util.getEvent(op.event)](op.dom)
     
     if (op['wait_dom']) {
       browser
