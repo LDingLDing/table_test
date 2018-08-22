@@ -1,7 +1,35 @@
-{
+[{
+    "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
+    "table_dom": { "thead_dom": "#mid .hq_table_theadfixed thead", "tbody_dom": "#mid .hq_table_base tbody"},
+    "table_cell": {
+        "累计净买入额": { "color": true, "unit": true, "fixed": "2", "sort": { "wait_time": "1000"}},
+        "持仓市值": {"unit": true, "sort": true},
+        "盈亏比":{ "fixed": "2", "color": true, "unit": "%", "sort": true},
+        "连续增持":{"color": true, "unit": "天", "sort": true},
+        "持仓股":{"sort": true},
+        "昨日新入":{"color": true, "sort": true, "unit": "只"},
+        "昨日减持":{"sort": true, "unit": "只"},
+        "昨日增持":{"sort": true, "unit": "只"}
+    },
+    "table_empty": true
+}, {
     "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
     "before": [
-        {"event": "click", "dom": ".item-content:nth-child(2)", "wait_time": "5000"}
+        {"event": "click", "dom": ".item-content:nth-child(4)", "wait_time": "5000"}
+    ],
+    "table_dom": { "thead_dom": ".best-box .hq_table_theadfixed thead", "tbody_dom": ".best-box .hq_tbody_base tbody"},
+    "table_empty": true
+}, {
+    "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
+    "before": [
+        {"event": "click", "dom": ".item-content:nth-child(4)", "wait_time": "5000"}
+    ],
+    "table_dom": { "thead_dom": "#otherTable .hq_table_theadfixed thead", "tbody_dom": "#otherTable .hq_table_base tbody"},
+    "table_empty": true
+}, {
+    "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
+    "before": [
+        {"event": "click", "dom": ".item-content:nth-child(5)", "wait_time": "5000"}
     ],
     "table_dom": { "thead_dom": "#mid .hq_table_theadfixed thead", "tbody_dom": "#mid .hq_table_base tbody"},
     "table_cell": {
@@ -15,4 +43,4 @@
         "昨日增持":{"sort": true, "unit": "只"}
     },
     "table_empty": true
-}
+}]
