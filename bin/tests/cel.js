@@ -15,44 +15,76 @@ function doTest(browser) {
     if (!app['table_cell'][colName]) {
       continue
     }
-    Util.statusLog('开始验证表格【' + colName + '】列：');
-    for (let axis of tableElements[colName].tbody) {
-      let [x, y] = axis.split(',')
-      x++;
-      y++;
-      let dom = app['table_dom']['tbody_dom'] + ' tr:nth-child(' + x + ') td:nth-child(' + y + ')'
-      browser.execute(function (selector) {
-        let dom = document.querySelector(selector)
-        let text = dom.innerText.trim().replace(/\n/g, '')
-        return text
-      }, [dom], function (data) {
-        let text = data.status === 0 ? data.value : ''
-        checkData(browser, colName, dom, text)
-      })
-    }
-    if (app['table_cell'][colName]['sort']) {
-      let colIndex = parseInt(tableElements[colName].tbody[0].split(',')[1])
-      browser.click(app['table_dom']['thead_dom'] + ' ' + tableElements[colName].thead.tag + ':nth-child(' + (colIndex + 1) + ')', function (response) {
-          console.log(response)
-        })
-        .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
-        .verify.checkSort(app['table_dom']['tbody_dom'], colIndex, colName)
-    }
-  }
-}
+    // Util.statusLog('开始验证表格【' + colName + '】列：');
+    // for (let axis of tableElements[colName].tbody) {
+    //   let [x, y] = axis.split(',')
+    //   x++;
+    //   y++;
+    //   let dom = app['table_dom']['tbody_dom'] + ' tr:nth-child(' + x + ') td:nth-child(' + y + ')'
+    //   browser.execute(function (selector) {
+    //     let dom = document.querySelector(selector)
+    //     let text = dom.innerText.trim().replace(/\n/g, '')
+    //     return text
+    //   }, [dom], function (data) {
+    //     let text = data.status === 0 ? data.value : ''
+    //     checkData(browser, colName, dom, text)
+    //   })
+    // }
 
-function checkData(browser, colName, dom, text) {
-  if (Empty.isEmpty(text)) {
-    return
-  }
-  if (app['table_cell'][colName]['fixed']) {
-    browser.expect.element(dom).text.to.match(/\d+(\.\d{2})(\D*)$/)
-  }
-  if (app['table_cell'][colName]['color']) {
-    browser.verify.fontColor(dom)
-  }
-  if (app['table_cell'][colName]['unit']) {
-    browser.verify.checkUnit(dom, app['table_cell'][colName]['unit'])
+    // 获取每列的数据
+    let colIndex = parseInt(tableElements[colName].tbody[0].split(',')[1])
+    browser.execute(function (selector, colIndex) {
+      // let colDoms = []
+      let colData = {
+        colors: [],
+        texts: []
+      }
+      let trs = document.querySelectorAll(selector + ' tr')
+      for (let i = 0; i < trs.length; i++) {
+        let dom = trs[i].children[colIndex]
+        // colDoms.push(dom.children[colIndex])
+
+        let rgb = []
+        if (dom.childElementCount == 0) {
+          rgb.push(document.defaultView.getComputedStyle(dom, null).color.replace("rgb(", "").replace(")", ""))
+        } else {
+          rgb.push(document.defaultView.getComputedStyle(dom, null).color.replace("rgb(", "").replace(")", ""))
+          for (let i = 0; i < dom.childElementCount; i++) {
+            rgb.push(document.defaultView.getComputedStyle(dom.children[i], null).color.replace("rgb(", "").replace(")", ""))
+          }
+        }
+        colData.colors.push(rgb)
+
+        let text = dom.innerText.trim().replace(/\n/g, '')
+        colData.texts.push(text)
+      }
+      return colData
+    }, [app['table_dom']['tbody_dom'], colIndex], function (data) {
+      console.log(data)
+      if (data.status != 0) {
+        return
+      }
+      let colData = data.value
+      if (app['table_cell'][colName]['fixed']) {
+        browser.verify.checkFixed(colData, colName)
+      }
+      if (app['table_cell'][colName]['color']) {
+        browser.verify.fontColor(colData, colName)
+      }
+      if (app['table_cell'][colName]['unit']) {
+        browser.verify.checkUnit(colData, colName, app['table_cell'][colName]['unit'])
+      }
+    })
+
+    // let theadDom = app['table_dom']['thead_dom'] + ' ' + tableElements[colName].thead.tag + ':nth-child(' + (colIndex + 1) + ')'
+    // if (app['table_cell'][colName]['sort']) {
+    //   let colIndex = parseInt(tableElements[colName].tbody[0].split(',')[1])
+    //   browser.click(theadDom, function (response) {
+    //       console.log(response)
+    //     })
+    //     .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
+    //     .verify.checkSort(app['table_dom']['tbody_dom'], colIndex, colName)
+    // }
   }
 }
 
