@@ -65,10 +65,10 @@ function doTest(browser) {
         return
       }
       let colData = data.value
-      if (app['table_cell'][colName]['fixed']) {
+      if (app['table_cell'][colName]['fixed'] && app['table_cell'][colName]['color'] != "false") {
         browser.verify.checkFixed(colData, colName)
       }
-      if (app['table_cell'][colName]['color']) {
+      if (app['table_cell'][colName]['color'] && app['table_cell'][colName]['color'] != "false") {
         browser.verify.fontColor(colData, colName)
       }
       if (app['table_cell'][colName]['unit']) {
@@ -77,7 +77,9 @@ function doTest(browser) {
       if (app['table_cell'][colName]['sort']) {
         let theadDom = app['table_dom']['thead_dom'] + ' ' + tableElements[colName].thead.tag + ':nth-child(' + (colIndex + 1) + ')'
         browser.click(theadDom, function (response) {
-            console.log(response)
+            if (response.status == 0) {
+              console.log('点击【' + colName + '】表头进行排序')
+            } else
             if (response.status == 13) {
               console.log('设置的表头节点不是一个可点击的节点')
             }

@@ -65,7 +65,7 @@ exports.assertion = function (selector, colIndex, colName) {
       }
       preData = realData(val)
     }
-    this.message += ' 验证成功！'
+    this.message += '验证成功！'
     return true
   }
   this.value = function (data) {

@@ -11,7 +11,7 @@ exports.assertion = function (colDatas, colName, unit) {
       if (Math.abs(parseFloat(text)) > 10000) {
         checkFlag.push('第'+(i+1)+'行缺少单位：万或亿；\n')
       }
-      if (unit != 'true') {
+      if (unit != 'true' || unit != true) {
         if (text.indexOf(unit) < 0 && parseFloat(text) != 0) {
           checkFlag.push('第'+(i+1)+'行缺少单位：'+unit+'；\n')
         }
