@@ -5,7 +5,8 @@ module.exports = {
 	tmpDir: path.resolve(__dirname, './tmp/'),
 	runDir: path.resolve(__dirname, './run/'),
 	eventsMap: {
-		'click': 'angryClick'
+		'click': 'angryClick',
+		'scroll': 'scroll'
 	},
 	getEvent (event) {
 		return this.eventsMap[event] || event

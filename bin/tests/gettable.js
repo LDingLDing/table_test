@@ -32,8 +32,18 @@ function beforeFindTable(browser) {
 
     browser
       .waitForElementVisible(op.dom)
-    browser[Util.getEvent(op.event)](op.dom)
 
+    // 懒加载
+    if (op.event === 'scroll') {
+      browser.verify.scrollTable(op.dom, {
+        time: op.wait_time || 1000,
+        trLen: op.wait_length || 100,
+        tbody_dom: app['table_dom']['tbody_dom']
+      })
+    } else { //normal
+      browser[Util.getEvent(op.event)](op.dom)
+    }
+    
     if (op['wait_dom']) {
       browser
         .waitForElementVisible(op['wait_dom'], op['wait_time'])
@@ -175,8 +185,13 @@ function checkTheadChildTag(browser, Thead, callback) {
 }
 
 
+<<<<<<< HEAD
+function end (browser) {
+  // browser.end()
+=======
 function end(browser) {
   browser.end()
+>>>>>>> 415c2bdf2ef678b6a0a3a8f7437a3808b9232193
 }
 
 initApp(app)
