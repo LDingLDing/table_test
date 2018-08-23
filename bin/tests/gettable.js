@@ -14,7 +14,7 @@ function openUrl(browser) {
 
   if (app.before) {
     beforeFindTable(browser)
-  } 
+  }
   // else {
   // 	findTable(browser)
   // }
@@ -29,7 +29,7 @@ function beforeFindTable(browser) {
       // findTable(browser)
       return
     }
-    
+
     browser
       .waitForElementVisible(op.dom)
 
@@ -54,7 +54,7 @@ function beforeFindTable(browser) {
 
     action(++i)
   }
-  action (0)
+  action(0)
 }
 
 function findTable(browser) {
@@ -62,12 +62,12 @@ function findTable(browser) {
   browser.waitForElementVisible(app['table_dom']['tbody_dom'])
 }
 
-function initApp () {
+function initApp() {
   Cel.initApp(app)
   Empty.initApp(app)
 }
 
-function initData (browser) {
+function initData(browser) {
   getTableElements(browser, (data) => {
     Cel.initData(data)
     Empty.initData(data)
@@ -84,47 +84,76 @@ function initData (browser) {
  *   },
  * }
  */
-function getTableElements (browser, callback) {
+function getTableElements(browser, callback) {
   // 确定thead内使用的是th还是td
   checkTheadChildTag(browser, app['table_dom']['thead_dom'], function (theadChildTag) {
     browser.execute(function (app, theadChildTag) {
-      let element = {}
+      let elements = []
       let theadDom = document.querySelectorAll(app['table_dom']['thead_dom'] + ' ' + theadChildTag)
       let tbodyDom = document.querySelectorAll(app['table_dom']['tbody_dom'] + ' tr')
-      let theadName = [] // 用于存放表格的标题，与app['table_cell']的key值对应
+      // let theadName = [] // 用于存放表格的标题，与app['table_cell']的key值对应
       for (let i = 0; i < theadDom.length; i++) {
-        let colName = theadDom[i].innerText
-        theadName.push(colName)
+        let element = {}
+        let colName = theadDom[i].innerText.trim().replace(/\n/g, '')
         if (!element[colName]) {
-          element[colName] = {
-            thead: {
-              index: i,
-              tag: theadChildTag
-            }
+          element['thead'] = {
+            index: i,
+            text: colName,
+            tag: theadChildTag
           }
         }
-      }
-      for (let i = 0; i < tbodyDom.length; i++) {
-        for (let j = 0; j < tbodyDom[i].children.length; j++) {
-          let colName = theadName[j]
-          if (!element[colName].tbody) {
-            element[colName].tbody = []
-          }
-          element[colName].tbody.push(i + ',' + j)
+        element['tbody'] = []
+        for (let j = 0; j < tbodyDom.length; j++) {
+          element['tbody'].push(j + ',' + i)
         }
+        elements.push(element)
       }
-      return element
+      return elements
     }, [app, theadChildTag], function (data) {
       let file = path.resolve(Util.tmpDir, './tableEle.json')
       Util.successLog('封装后的表格对象为：见' + file)
       fs.writeFile(file, JSON.stringify(data))
       callback(data.value)
     })
+    // browser.execute(function (app, theadChildTag) {
+    //   let element = {}
+    //   let theadDom = document.querySelectorAll(app['table_dom']['thead_dom'] + ' ' + theadChildTag)
+    //   let tbodyDom = document.querySelectorAll(app['table_dom']['tbody_dom'] + ' tr')
+    //   let theadName = [] // 用于存放表格的标题，与app['table_cell']的key值对应
+    //   for (let i = 0; i < theadDom.length; i++) {
+    //     let colName = theadDom[i].innerText
+    //     theadName.push(colName)
+    //     if (!element[colName]) {
+    //       element[colName] = {
+    //         thead: {
+    //           index: i,
+    //           tag: theadChildTag
+    //         }
+    //       }
+    //     }
+    //   }
+    //   for (let i = 0; i < tbodyDom.length; i++) {
+    //     for (let j = 0; j < tbodyDom[i].children.length; j++) {
+    //       let colName = theadName[j]
+    //       if (!element[colName].tbody) {
+    //         element[colName].tbody = []
+    //       }
+    //       element[colName].tbody.push(i + ',' + j)
+    //     }
+    //   }
+    //   return element
+    // }, [app, theadChildTag], function (data) {
+    //   console.log(data)
+    //   let file = path.resolve(Util.tmpDir, './tableEle.json')
+    //   Util.successLog('封装后的表格对象为：见' + file)
+    //   fs.writeFile(file, JSON.stringify(data))
+    //   callback(data.value)
+    // })
   })
 }
 
 // 用于判断thead的子节点是th还是td
-function checkTheadChildTag (browser, Thead, callback) {
+function checkTheadChildTag(browser, Thead, callback) {
   let [td, th] = [0, 0]
   let tag = ''
   browser.element('css selector', Thead + ' td', function (res) {
@@ -141,7 +170,8 @@ function checkTheadChildTag (browser, Thead, callback) {
     }
     call()
   })
-  function call () {
+
+  function call() {
     if (td && tag != '') {
       Util.successLog('thead的子节点标签是td')
       callback(tag)
@@ -149,14 +179,19 @@ function checkTheadChildTag (browser, Thead, callback) {
       Util.successLog('thead的子节点标签是th')
       callback(tag)
     } else if (td && th) {
-      Util.errorLog('未获取到 '+ Thead + ' th ' +'的内容！')
+      Util.errorLog('未获取到 ' + Thead + ' th ' + '的内容！')
     }
   }
 }
 
 
+<<<<<<< HEAD
 function end (browser) {
   // browser.end()
+=======
+function end(browser) {
+  browser.end()
+>>>>>>> 415c2bdf2ef678b6a0a3a8f7437a3808b9232193
 }
 
 initApp(app)

@@ -10,8 +10,8 @@ var data = [
             "连续增持":{"color": true, "unit": "天", "sort": true},
             "持仓股":{"sort": true},
             "昨日新入":{"color": true, "sort": true, "unit": "只"},
-            "昨日减持":{"sort": true, "unit": "只"},
-            "昨日增持":{"sort": true, "unit": "只"}
+            "昨日减持":{"color": {"fixedColor": "#08a365"}, "sort": true, "unit": "只"},
+            "昨日增持":{"color": {"associatedColor": "盈亏比"}, "sort": true, "unit": "只"}
         },
         "table_empty": true
     }, 

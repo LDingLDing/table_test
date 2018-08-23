@@ -1,4 +1,4 @@
-exports.assertion = function (colDatas, colName) {
+exports.assertion = function (colDatas, colName, colorType, associatedData) {
   this.message = '验证【' + colName + '】列的颜色----'
   this.expected = function () {}
   this.pass = function (data) {
@@ -6,8 +6,27 @@ exports.assertion = function (colDatas, colName) {
     for (let i in data.colors) {
       i = Number(i)
       let rgb = data.colors[i]
+      let currentColor = false // 是否在颜色数组中找到正确的颜色
+
+      // 列的颜色是固定的
+      if (colorType['fixedColor']) {
+        let targetColor = getRGB(colorType['fixedColor'])
+        for (let j in rgb) {
+          let color = rgb[j].split(',')
+          if (color[0] == targetColor.r && color[1] == targetColor.g && color[2] == targetColor.b) {
+            currentColor = true
+          }
+        }
+        if (!currentColor) {
+          checkFlag.push('第' + (i + 1) + '行的颜色不是' + colorType['fixedColor'] + '；\n')
+        }
+        continue
+      }
+      // 判断数值是否大于0
       let text = parseFloat(data.texts[i])
-      let currentColor = false
+      if (colorType['associatedColor']) {
+        text = parseFloat(associatedData.texts[i])
+      }
       if (text > 0) {
         for (let j in rgb) {
           let color = rgb[j].split(',')
@@ -46,6 +65,32 @@ exports.assertion = function (colDatas, colName) {
     } else {
       this.message += '验证出错！错误位置：' + checkFlag.join(',')
       return false
+    }
+
+
+    function getRGB(color) {
+      if (color.indexOf('#') == -1) {
+        let rgbArr = color.replace('rgb(', '').replace(')', '').split(',')
+        return {
+          r: rgbArr[0].trim(),
+          g: rgbArr[1].trim(),
+          b: rgbArr[2].trim()
+        }
+      }
+      var t = {},
+        bits = (color.length == 4) ? 4 : 8,
+        mask = (1 << bits) - 1;
+      color = Number("0x" + color.substr(1));
+      if (isNaN(color)) {
+        return null;
+      }
+      ["b", "g", "r"].forEach(function (x) {
+        var c = color & mask;
+        color >>= bits;
+        t[x] = bits == 4 ? 17 * c : c;
+      });
+      t.a = 1;
+      return t;
     }
   }
   this.value = function (data) {

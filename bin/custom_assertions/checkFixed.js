@@ -3,6 +3,7 @@ exports.assertion = function (colDatas, colName, fixed = 2) {
 	this.expected = function () {}
 	this.pass = function (data) {
 		let checkFlag = [];
+		// var reg = new RegExp('\\d+(\\\.\\d{' + fixed + '})(\\D*)$')
 		for (let i in data.texts) {
 			i = Number(i)
 			let text = data.texts[i]
