@@ -4,7 +4,7 @@
   "description": "",
   "main": "bin/index.js",
   "scripts": {
-    "test_jjcc": "node bin/startup.js --conf src/jjcc/config.json",
+    "test_jjcc": "node bin/startup.js --conf src/jjcc/config.js",
     "test_dev": "nightwatch --config bin/nightwatch.conf.js",
     "nightwatch": "nightwatch --config bin/nightwatch.conf.js --reporter bin/reporter/html-reporter.js"
   },
