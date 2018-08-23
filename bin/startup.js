@@ -9,6 +9,8 @@ const rimraf = require('rimraf')
 const getAsync = Promise.promisify(cmd.get, { multiArgs: true, context: cmd })
 const Util = require(path.resolve(__dirname, './util'))
 const NightwatchConf = require(path.resolve(__dirname, './nightwatch.conf.js'))
+const tmpDir = Util.tmpDir
+const runDir = Util.runDir
 // const Nightwatch = require('nightwatch')
 
 if (!argv.conf) {
@@ -19,7 +21,12 @@ fs.readFile(confPath, (err, data) => {
   if (err) {
     console.log(colors.red('【ERROR】 未找到配置文件，\n' + err.path))
   }
-  startup(confPath)
+
+  
+  rimraf(tmpDir, () => {})
+  rimraf(runDir, () => {
+    startup(confPath)
+  })
 })
 
 /* Check config.json */
@@ -48,7 +55,6 @@ function checkConf (item) {
 function startup (confPath) {
   const CONFIG = require(confPath)
   const apps = _.isArray(CONFIG) ? CONFIG : [CONFIG]
-  const tmpDir = Util.tmpDir
   let testFileContent
 
   for (let i in apps) {
@@ -74,10 +80,8 @@ function startup (confPath) {
         console.log(data)
       })
 
-      processRef.on('close', code => {
-        rimraf(tmpDir, () => {})
-        rimraf(path.resolve(__dirname, './run'), () => {})
-      })
+      // processRef.on('close', code => {
+      // })
 
       return
     }
@@ -87,11 +91,13 @@ function startup (confPath) {
     } catch(e) {}
     fs.writeFileSync(configFile,  JSON.stringify(item))
     try {
-      fs.mkdirSync(path.resolve(__dirname, './run'))
+      fs.mkdirSync(runDir)
     } catch(e) {}
-    let fileName = item.suite || 'gettable' + (+count+1)
+    let num = +count+1
+    num = num < 10 ? '0' + num : num
+    let fileName = num + '：' + item.suite || 'gettable' + (+count+1)
     fs.writeFileSync(
-      path.resolve(__dirname, './run/' + fileName + '.js'),
+      path.resolve(runDir, fileName + '.js'),
       testFileContent.replace('${confPath}$', 'config'+ (+count+1) +'.json')
     )
     
