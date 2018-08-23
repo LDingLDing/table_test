@@ -184,14 +184,8 @@ function checkTheadChildTag(browser, Thead, callback) {
   }
 }
 
-
-<<<<<<< HEAD
-function end (browser) {
-  // browser.end()
-=======
 function end(browser) {
   browser.end()
->>>>>>> 415c2bdf2ef678b6a0a3a8f7437a3808b9232193
 }
 
 initApp(app)
