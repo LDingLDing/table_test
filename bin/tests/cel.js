@@ -14,7 +14,6 @@ function initApp(value) {
 }
 
 function doTest(browser) {
-  console.log('---------------------------------1------------------------------')
   browser.execute(function (tbodyDom, tableElements, app) {
     let tableData = []
     let trs = document.querySelectorAll(tbodyDom + ' tr')
@@ -72,7 +71,23 @@ function doTest(browser) {
         browser.verify.checkFixed(colData, colName, app['table_cell'][colName]['fixed'])
       }
       if (app['table_cell'][colName]['color'] && app['table_cell'][colName]['color'] != "false") {
-        browser.verify.fontColor(colData, colName, app['table_cell'][colName]['color'])
+        if (app['table_cell'][colName]['color']['fixedColor']) {
+          // 列的颜色是固定的
+          browser.verify.fontColor(colData, colName, app['table_cell'][colName]['color'])
+        } else if (app['table_cell'][colName]['color']['associatedColor']) {
+          // 列的颜色是和其他列的数据关联的
+          let assoName = app['table_cell'][colName]['color']['associatedColor']
+          let associatedData = void 0
+          for (let val of data.value) {
+            if (val.thead.colName == assoName) {
+              associatedData = val.colData
+            }
+          }
+          browser.verify.fontColor(colData, colName, app['table_cell'][colName]['color'], associatedData)
+        } else {
+          // 默认判断
+          browser.verify.fontColor(colData, colName, app['table_cell'][colName]['color'])
+        }
       }
       if (app['table_cell'][colName]['unit'] && app['table_cell'][colName]['unit'] != "false") {
         browser.verify.checkUnit(colData, colName, app['table_cell'][colName]['unit'])
