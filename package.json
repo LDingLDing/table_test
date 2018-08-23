@@ -6,7 +6,7 @@
   "scripts": {
     "test_jjcc": "node bin/startup.js --conf src/jjcc/config.json",
     "test_dev": "nightwatch --config bin/nightwatch.conf.js",
-    "nightwatch": "nightwatch --config bin/nightwatch.conf.js --reporter bin/html-reporter.js"
+    "nightwatch": "nightwatch --config bin/nightwatch.conf.js --reporter bin/reporter/html-reporter.js"
   },
   "keywords": [],
   "author": "",

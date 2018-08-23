@@ -1,0 +1,35 @@
+h1 测试报告
+//- - console.dir(testRun)
+
+#container
+	//- if !hideSuccess
+	//- 	a.toggleSuccess(href='#') Show/Hide Successes
+
+	if testRun.errmessages.length > 0
+		div.errmessages
+			h2 Errors
+				span.count= ' (' + testRun.errmessages.length + ')'
+			ul.errors
+				each msg in testRun.errmessages
+					li= msg
+
+	each pkg in testRun.packages
+		div(class= (pkg.isFailure) ? 'package error' : 'package success')
+			h2.name!= (pkg.isFailure) ? '&#10005; ' + pkg.name : '&#10003; ' + pkg.name
+			div.suites
+				each suite in pkg.suites
+					//- -console.log(suite)
+					div(class= (suite.isFailure) ? 'suite error' : 'suite success')
+						h3.name= suite.name + ' (' + suite.time + 's)'
+						ul.testcases
+							each testCase in suite.cases
+								li(class= (testCase.isFailure) ? 'testcase error' : 'testcase success')
+									if testCase.isFailure
+										div.status &#10005;
+										div.name= testCase.message
+										each sshot in testCase.screenshots
+											div.screenshot
+												img(src= sshot)
+									else
+										div.status &#10003;
+										div.name= testCase.message + ((testCase.skipped) ? " (skipped)" : "")
