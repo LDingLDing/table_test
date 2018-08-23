@@ -138,15 +138,21 @@ node bin/startup.js --conf src/jjcc/config.json
 ]
 ```
 
-- **Q2: 虚拟表格，待测试的thead与tbody不在一个table下**
+- **Q2: 为什么需要thead_dom和tbody_dom两个值**
 
-table_dom同时支持以下格式
+table_dom支持以下格式
 ```
 "table_dom" : {
     "thead_dom" : "your_thead_dom",
     "tbody_dom" : "your_tbody_dom"
 }
 ```
+
+所有表头固定的表格，其实是由**两个表格**组成的，所以需要单独指定thead和tbody
+
+
+
+
 
 ### table_cell
 
@@ -168,7 +174,7 @@ table_dom同时支持以下格式
 | 字段    | 可选值                                      | 含义                                       |
 | ----- | ---------------------------------------- | ---------------------------------------- |
 | fixed | number                                   | 验证数值保留几位小数位                              |
-| color | true                                     | 验证数值的颜色是否正确（目前只支持通过判断当前数据是否大于0来决定颜色）     |
+| color | true/ {fixedColor: "#08a365"}/ {associatedColor: "涨跌幅"} | 验证数值的颜色是否正确（值为true，则表示针对该列每个值的正负来判断该显示红色还是绿色还是默认颜色；值为fixedColor，则会验证该列所有的数据颜色是否都为fixedColor设置的值；值为associatedColor，则表示该列每项数据的颜色都与对应associatedColor列的数据颜色一致，如“现价”的颜色与“涨跌幅”的颜色是一致的） |
 | unit  | true/具体单位（如：元）                           | 验证数值的单位是否正确（值为true，则表示验证“万、亿”的判断；值为具体单位，则表示验证具体单位加“万、亿”的判断） |
 | sort  | true/{wait_time: 1000}（wait_time表示点击后需要等待的时间，单位是毫秒。因为有的排序是请求接口排序的，需要等待接口返回数据） | 验证当前列的排序功能是否正确（会对当前列表头进行两次点击，分别验证升序降序是否排列正确）（值为true，则默认等待时间500ms） |
 
