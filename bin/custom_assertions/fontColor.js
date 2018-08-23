@@ -1,4 +1,4 @@
-exports.assertion = function (colDatas, colName) {
+exports.assertion = function (colDatas, colName, color) {
   this.message = '验证【' + colName + '】列的颜色----'
   this.expected = function () {}
   this.pass = function (data) {
@@ -7,7 +7,7 @@ exports.assertion = function (colDatas, colName) {
       i = Number(i)
       let rgb = data.colors[i]
       let text = parseFloat(data.texts[i])
-      let currentColor = false
+      let currentColor = false // 是否在颜色数组中找到正确的颜色
       if (text > 0) {
         for (let j in rgb) {
           let color = rgb[j].split(',')

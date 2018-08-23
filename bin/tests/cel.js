@@ -10,43 +10,28 @@ function initData(data) {
 }
 
 function initApp(value) {
-	app = value
+  app = value
 }
 
 function doTest(browser) {
-  // console.log('---------------------------------1------------------------------')
-  for (let colName in tableElements) {
-    if (!app['table_cell'][colName]) {
-      continue
-    }
-    // Util.statusLog('开始验证表格【' + colName + '】列：');
-    // for (let axis of tableElements[colName].tbody) {
-    //   let [x, y] = axis.split(',')
-    //   x++;
-    //   y++;
-    //   let dom = app['table_dom']['tbody_dom'] + ' tr:nth-child(' + x + ') td:nth-child(' + y + ')'
-    //   browser.execute(function (selector) {
-    //     let dom = document.querySelector(selector)
-    //     let text = dom.innerText.trim().replace(/\n/g, '')
-    //     return text
-    //   }, [dom], function (data) {
-    //     let text = data.status === 0 ? data.value : ''
-    //     checkData(browser, colName, dom, text)
-    //   })
-    // }
-
-    // 获取每列的数据
-    let colIndex = parseInt(tableElements[colName].tbody[0].split(',')[1])
-    browser.execute(function (selector, colIndex) {
-      // let colDoms = []
+  console.log('---------------------------------1------------------------------')
+  browser.execute(function (tbodyDom, tableElements, app) {
+    let tableData = []
+    let trs = document.querySelectorAll(tbodyDom + ' tr')
+    for (let col in tableElements) {
+      let colName = tableElements[col].thead.text
+      let colIndex = parseInt(tableElements[col].thead.index)
+      let theadTag = tableElements[col].thead.tag
+      if (!app['table_cell'][colName]) {
+        continue
+      }
+      // 获取每列的数据
       let colData = {
         colors: [],
         texts: []
       }
-      let trs = document.querySelectorAll(selector + ' tr')
       for (let i = 0; i < trs.length; i++) {
         let dom = trs[i].children[colIndex]
-        // colDoms.push(dom.children[colIndex])
 
         let rgb = []
         if (dom.childElementCount == 0) {
@@ -62,31 +47,45 @@ function doTest(browser) {
         let text = dom.innerText.trim().replace(/\n/g, '')
         colData.texts.push(text)
       }
-      return colData
-    }, [app['table_dom']['tbody_dom'], colIndex], function (data) {
-      // fs.writeFile('bin/tmp/cel.json', JSON.stringify(data))
-      if (data.status != 0) {
-        return
-      }
-      let colData = data.value
+      tableData.push({
+        thead: {
+          colIndex: colIndex,
+          colName: colName,
+          theadTag: theadTag
+        },
+        colData: colData
+      })
+    }
+
+    return tableData
+  }, [app['table_dom']['tbody_dom'], tableElements, app], function (data) {
+    console.log(data)
+    if (data.status != 0) {
+      return
+    }
+    for (let i in data.value) {
+      let colName = data.value[i].thead.colName
+      let colIndex = data.value[i].thead.colIndex
+      let theadTag = data.value[i].thead.theadTag
+      let colData = data.value[i].colData
       if (app['table_cell'][colName]['fixed'] && app['table_cell'][colName]['color'] != "false") {
-        browser.verify.checkFixed(colData, colName)
+        browser.verify.checkFixed(colData, colName, app['table_cell'][colName]['fixed'])
       }
       if (app['table_cell'][colName]['color'] && app['table_cell'][colName]['color'] != "false") {
-        browser.verify.fontColor(colData, colName)
+        browser.verify.fontColor(colData, colName, app['table_cell'][colName]['color'])
       }
-      if (app['table_cell'][colName]['unit']) {
+      if (app['table_cell'][colName]['unit'] && app['table_cell'][colName]['unit'] != "false") {
         browser.verify.checkUnit(colData, colName, app['table_cell'][colName]['unit'])
       }
-      if (app['table_cell'][colName]['sort']) {
-        let theadDom = app['table_dom']['thead_dom'] + ' ' + tableElements[colName].thead.tag + ':nth-child(' + (colIndex + 1) + ')'
+      if (app['table_cell'][colName]['sort'] && app['table_cell'][colName]['sort'] != "false") {
+        let theadDom = app['table_dom']['thead_dom'] + ' ' + theadTag + ':nth-child(' + (colIndex + 1) + ')'
         browser
           .angryClick(theadDom, function (response) {
             if (response.status == 0) {
               Util.statusLog('点击【' + colName + '】表头进行排序')
             } else
             if (response.status == 13) {
-              Util.errorLog('设置的表头节点不是一个可点击的节点')
+              Util.errorLog('设置的表头节点不是一个可点击的节点!')
             }
           })
           .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
@@ -96,15 +95,14 @@ function doTest(browser) {
               Util.statusLog('再次点击【' + colName + '】表头进行排序')
             } else
             if (response.status == 13) {
-              Util.errorLog('设置的表头节点不是一个可点击的节点')
+              Util.errorLog('设置的表头节点不是一个可点击的节点!')
             }
           })
           .pause(app['table_cell'][colName]['sort']['wait_time'] || 500)
           .verify.checkSort(app['table_dom']['tbody_dom'], colIndex, colName)
       }
-    })
-
-  }
+    }
+  })
 }
 
 module.exports = {
