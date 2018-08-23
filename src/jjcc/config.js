@@ -55,6 +55,9 @@ var data = [
     {
         "suite": "全部持仓",
         "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
+        "before": [
+            {"event": "scroll", "dom": "#tableRight .hq_container_base", "wait_time": "5000", "wait_length": 100}
+        ],
         "table_dom": { "thead_dom": "#tableRight .hq_table_tablefixed thead", "tbody_dom": "#tableRight .hq_table_base tbody"},
         "table_cell": {
             "持仓市值": { "unit": true, "fixed": "2", "sort": { "wait_time": "2000"}},

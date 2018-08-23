@@ -37,7 +37,7 @@ function beforeFindTable(browser) {
     if (op.event === 'scroll') {
       browser.verify.scrollTable(op.dom, {
         time: op.wait_time || 1000,
-        trLen: op.wait_length || 100,
+        wait_length: op.wait_length || 100,
         tbody_dom: app['table_dom']['tbody_dom']
       })
     } else { //normal
