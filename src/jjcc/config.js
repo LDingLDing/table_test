@@ -12,8 +12,7 @@ var data = [
             "昨日新入":{"color": true, "sort": true, "unit": "只"},
             "昨日减持":{"color": {"fixedColor": "#08a365"}, "sort": true, "unit": "只"},
             "昨日增持":{"color": {"associatedColor": "盈亏比"}, "sort": true, "unit": "只"}
-        },
-        "table_empty": true
+        }
     }, 
     {
         "suite": "抱团实力 左上",
@@ -21,8 +20,7 @@ var data = [
         "before": [
             {"event": "click", "dom": ".item-content:nth-child(4)", "wait_time": "5000"}
         ],
-        "table_dom": { "thead_dom": ".best-box .hq_table_theadfixed thead", "tbody_dom": ".best-box .hq_container_base tbody"},
-        "table_empty": true
+        "table_dom": { "thead_dom": ".best-box .hq_table_theadfixed thead", "tbody_dom": ".best-box .hq_container_base tbody"}
     }, 
     {
         "suite": "抱团实力 左下",
@@ -30,8 +28,7 @@ var data = [
         "before": [
             {"event": "click", "dom": ".item-content:nth-child(4)", "wait_time": "5000"}
         ],
-        "table_dom": { "thead_dom": "#otherTable .hq_table_theadfixed thead", "tbody_dom": "#otherTable .hq_table_base tbody"},
-        "table_empty": true
+        "table_dom": { "thead_dom": "#otherTable .hq_table_theadfixed thead", "tbody_dom": "#otherTable .hq_table_base tbody"}
     }, 
     {
         "suite": "明星经纪商",
@@ -49,8 +46,7 @@ var data = [
             "昨日新入":{"color": true, "sort": true, "unit": "只"},
             "昨日减持":{"sort": true, "unit": "只"},
             "昨日增持":{"sort": true, "unit": "只"}
-        },
-        "table_empty": true
+        }
     },
     {
         "suite": "全部持仓",
@@ -69,8 +65,7 @@ var data = [
             "占仓比":{"color": true, "unit": "%", "sort": { "wait_time": "2000"}},
             "连续增持":{"color": true, "unit": "天", "sort": { "wait_time": "2000"}},
             "调仓幅度":{"color": true, "unit": "%", "sort": { "wait_time": "2000"}}
-        },
-        "table_empty": true
+        }
     }
 ]
 
