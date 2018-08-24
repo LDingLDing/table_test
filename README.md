@@ -33,14 +33,14 @@
 src/jjcc/config.js
 ```
 
-2. 在package.json中建立快速启动命令。插入即可 不用删除原有的，--conf 后路径与第一步中闯进的文件路径一致即可。
+2. 在package.json中建立快速启动命令。插入即可 不用删除原有的，--conf 后路径与第一步中创建的文件路径一致即可。
 
 ```
- "scripts": {
-     "test_jjcc": "node bin/startup.js --conf src/jjcc/config.js",
-     "test_dev": "nightwatch --config bin/nightwatch.conf.js",
+"scripts": {
+    "test_jjcc": "node bin/startup.js --conf src/jjcc/config.js",
+    "test_dev": "nightwatch --config bin/nightwatch.conf.js",
     "nightwatch": "nightwatch --config bin/nightwatch.conf.js"
-  },
+},
 ```
 
 ### 为项目进行配置
@@ -77,14 +77,14 @@ var data = {
 
 module.exports = data
 ```
-具体见[config配置](#productconfig)
+具体见[config配置](#product-config)
 
 ### 运行测试程序
 控制台目录切换到当前`table_test`目录下（根目录），运行如下命令（在前面你添加的快速启动命令）
 ```
 npm run test_jjcc  
 ```
-或者 （conf修改为你新增的配置文件路径）
+或者 （--conf修改为你新增的配置文件路径）
 ```
 node bin/startup.js --conf src/jjcc/config.js
 ```
@@ -93,22 +93,21 @@ node bin/startup.js --conf src/jjcc/config.js
 ### Product Config
 | 字段          | 必填   | 含义                                       |
 | ----------- | ---- | ---------------------------------------- |
-| suite       |      | 测试用例名，为当前配置的表格配置名称，建议描述为**具体功能**或**位置信息**，如*持仓模块表格* 或 *右下角表格* |
+| suite       |      | 测试用例名，为当前配置的表格配置名称，建议描述为**具体功能**或**位置信息**，如*"持仓模块表格"* 或 *"右下角表格"* |
 | url         | √    | 需要测试的网址                                  |
 | before      |      | 有些表格并不在首屏展示，那么需要描述如何展示出表格，具体见 [before配置](#before) |
 | table_dom   | √    | 表格的唯一节点，如有多个取第一个。有问题见 [table节点](#table_dom) |
 | table_cell  |      | 对单元格进行正确性验证，支持`颜色(红涨绿跌)`、`单位`、`小数位`、`排序` ， 具体见 [table_cell配置](#table_cell) |
-| table_empty |      | 检查是否有单元格为空，以及无数据下是否有提示内容                 |
 
 ### before
 
 格式如下：
 ```
 "before": [
-			{"event": "click", "dom": "#tab1", "wait_time": "500", "wait_dom": "#wrap"},
-			{"event": "click", "dom": "#tab1", "wait_dom": "#wrap"},
-			{"event": "click", "dom": "#tab1", "wait_time": "500"}
-		],
+	{"event": "click", "dom": "#tab1", "wait_time": "500", "wait_dom": "#wrap"},
+	{"event": "click", "dom": "#tab1", "wait_dom": "#wrap"},
+	{"event": "click", "dom": "#tab1", "wait_time": "500"}
+],
 ```
 1. 按照执行顺序填写
 2. event表示事件，dom表示节点，即在X节点进行X操作
@@ -120,7 +119,7 @@ node bin/startup.js --conf src/jjcc/config.js
 
 ### before-scroll
 
-** before中支持event为`scroll`以支持懒加载表格后再进行后续验证 **
+> before中支持event为`scroll`以支持懒加载表格后再进行后续验证
 
 ```json
 
@@ -133,6 +132,7 @@ node bin/startup.js --conf src/jjcc/config.js
 - **wait_length** ： 滚动直至多少条(tr)数据
 
 ！ `wait_time`和 `wait_length` 取交集，即达到规定条数或超出时间都会滚动结束。
+
 
 ### table_dom
 
@@ -180,12 +180,12 @@ table_dom支持以下格式
 
 ```
 "table_cell": {
-        "累计净买入额": { "color": true, "unit": true, "fixed": "2", "sort": { "wait_time": "1000"}},
-        "持仓市值": {"unit": true, "sort": true},
-        "盈亏比":{ "fixed": "2", "color": true, "unit": "%", "sort": true},
-        "连续增持":{"color": true, "unit": "天", "sort": true},
-        "持仓股":{"sort": true}
-    }
+    "累计净买入额": { "color": true, "unit": true, "fixed": "2", "sort": { "wait_time": "1000"}},
+    "持仓市值": {"unit": true, "sort": true},
+    "盈亏比":{ "fixed": "2", "color": true, "unit": "%", "sort": true},
+    "连续增持":{"color": true, "unit": "天", "sort": true},
+    "持仓股":{"sort": true}
+}
 ```
 
 **table_cell** 是对表格列数据进行验证的，每一列都是用key: value的格式来定义的，key值为表格的每列的表头，value值为一个对象，具体配置见下表：
