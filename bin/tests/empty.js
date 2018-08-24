@@ -3,14 +3,13 @@ const fs = require('fs')
 const Util = require(path.resolve(__dirname, '../util'))
 let app
 let data
+let colsMap = {} // name -> colsData
 let doTest = {
 	'空值检查:是否有数据': checkTbody,
 	'空值检查：为空单元格': checkCel
 }
 
 // TODO if 如果没有一行内容， 有无内容提示
-
-let emptyStr = ['--', '-', '']
 
 /*
 * 表格是否全空 (逻辑需要，放到gettable处理)
@@ -68,25 +67,19 @@ function checkCel(browser) {
 			let cols = rst.value[c].data
 			let arr = []
 			for (let r in cols) {
-				if (isEmpty(cols[r])) {
-					arr.push(r)
+				if (Util.isEmpty(cols[r])) {
+					arr.push({index: r, text: cols[r]})
 				}
 			}
 			colsEmpty.push(arr)
-			browser.verify.checkCelEmpty(arr, c, rst.value)
+			browser.verify.checkCelEmpty(arr, c, rst.value, app['table_cell'])
 		}
 		// fs.writeFile('bin/tmp/t.json', JSON.stringify(rst.value))
 	})
 }
-function isEmpty(str) {
-	str = str + ''
-	str = str.replace(/\r|\n|\\s/g, '')
-	return !!~emptyStr.indexOf(str.trim())
-}
 
 module.exports = {
 	'doTest': doTest,
-	'isEmpty': isEmpty,
 	'initData': initData,
 	'initApp': initApp
 }

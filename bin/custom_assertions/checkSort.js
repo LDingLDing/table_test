@@ -1,4 +1,4 @@
-const Empty = require('../tests/empty')
+const Util = require('../util')
 exports.assertion = function (selector, colIndex, colName) {
   this.message = '验证【' + colName + '】列的排序----'
   this.expected = function () {}
@@ -22,14 +22,14 @@ exports.assertion = function (selector, colIndex, colName) {
       i = Number(i)
       // 出现第一个空值后，后面应该出现的全为空值
       if (isBeginEmpty) {
-        if (!Empty.isEmpty(val)) {
+        if (!Util.isEmpty(val)) {
           this.message += '\n出现错误：\n错误位置: 第' + (i + 1) + '行\n错误原因: 前一项数据已经为空数据，之后的数据应该全为空！'
           return false
         }
         continue
       }
       // 判断当前数据是否为空
-      if (Empty.isEmpty(val)) {
+      if (Util.isEmpty(val)) {
         isBeginEmpty = true
         continue
       }

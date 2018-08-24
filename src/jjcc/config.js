@@ -60,6 +60,8 @@ var data = [
         ],
         "table_dom": { "thead_dom": "#tableRight .hq_table_tablefixed thead", "tbody_dom": "#tableRight .hq_table_base tbody"},
         "table_cell": {
+            "名称": { "empty": '--' },
+            "持仓趋势": { "empty": true },
             "持仓市值": { "unit": true, "fixed": "2", "sort": { "wait_time": "2000"}},
             "持仓成本": { "color": true, "sort": { "wait_time": "2000"}},
             "持仓盈亏比":{ "fixed": "2", "color": true, "unit": "%", "sort": { "wait_time": "2000"}},
