@@ -195,7 +195,7 @@ let obj = {
   '获取表格/表格是否有内容': findTable,
   '开始进行表格数据处理': initData
 }
-app['table_empty'] && (obj = Object.assign(obj, Empty.doTest || {}))
+obj = Object.assign(obj, Empty.doTest || {})
 app['table_cell'] && (obj['单元格验证'] = Cel.doTest)
 
 obj['关闭'] = end

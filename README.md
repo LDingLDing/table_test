@@ -71,8 +71,7 @@ var data = {
                 "wait_time": "500"
             }
         }
-    },
-    "table_empty": true
+    }
 }
 
 module.exports = data
