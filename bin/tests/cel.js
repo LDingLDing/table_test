@@ -58,7 +58,6 @@ function doTest(browser) {
 
     return tableData
   }, [app['table_dom']['tbody_dom'], tableElements, app], function (data) {
-    console.log(data)
     if (data.status != 0) {
       return
     }
