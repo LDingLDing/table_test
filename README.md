@@ -28,16 +28,16 @@
 
 ### 建立项目配置文件 & 添加快速启动命令
 
-1. 在src下新建目录**jjcc**(项目名 经济持仓)，在jjcc下新建**config.json**
+1. 在src下新建目录**jjcc**(项目名 经济持仓)，在jjcc下新建**config.js**
 ```
-src/jjcc/config.json
+src/jjcc/config.js
 ```
 
 2. 在package.json中建立快速启动命令。插入即可 不用删除原有的，--conf 后路径与第一步中闯进的文件路径一致即可。
 
 ```
  "scripts": {
-     "test_jjcc": "node bin/startup.js --conf src/jjcc/config.json",
+     "test_jjcc": "node bin/startup.js --conf src/jjcc/config.js",
      "test_dev": "nightwatch --config bin/nightwatch.conf.js",
     "nightwatch": "nightwatch --config bin/nightwatch.conf.js"
   },
@@ -45,8 +45,8 @@ src/jjcc/config.json
 
 ### 为项目进行配置
 基础例子
-```json
-{
+```js
+var data = {
     "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
     "before": [
         {"event": "click", "dom": ".item-content:nth-child(2)", "wait_time": "500"}
@@ -74,8 +74,10 @@ src/jjcc/config.json
     },
     "table_empty": true
 }
+
+module.exports = data
 ```
-具体见[config.json配置](#configjson)
+具体见[config配置](#productconfig)
 
 ### 运行测试程序
 控制台目录切换到当前`table_test`目录下（根目录），运行如下命令（在前面你添加的快速启动命令）
@@ -84,13 +86,14 @@ npm run test_jjcc
 ```
 或者 （conf修改为你新增的配置文件路径）
 ```
-node bin/startup.js --conf src/jjcc/config.json
+node bin/startup.js --conf src/jjcc/config.js
 ```
 
 
-### config.json
+### Product Config
 | 字段          | 必填   | 含义                                       |
 | ----------- | ---- | ---------------------------------------- |
+| suite       |      | 测试用例名，为当前配置的表格配置名称，建议描述为**具体功能**或**位置信息**，如*持仓模块表格* 或 *右下角表格* |
 | url         | √    | 需要测试的网址                                  |
 | before      |      | 有些表格并不在首屏展示，那么需要描述如何展示出表格，具体见 [before配置](#before) |
 | table_dom   | √    | 表格的唯一节点，如有多个取第一个。有问题见 [table节点](#table_dom) |
@@ -113,17 +116,33 @@ node bin/startup.js --conf src/jjcc/config.json
 4. 每一步操作后浏览器需要一定时间反应，可以通过`wait_dom`(等待X节点出现为止)或`wait_time`（等待时间X毫秒）后在执行下一步
 5. `wait_dom`和`wait_time`可以都不写，那么默认立即进行下步操作
 6. `wait_dom`和`wait_time`都写的话，表示等待X节点最多X毫秒
+7. 懒加载的场景说明见[before中的滚动事件](#before-scroll)
 
+### before-scroll
+
+** before中支持event为`scroll`以支持懒加载表格后再进行后续验证 **
+
+```json
+
+{"event": "scroll", "dom": "#tableRight .hq_container_base", "wait_time": "5000", "wait_length": 100}
+
+```
+- **event** : （必填）事件名
+- **dom** ： （必填）执行滚动的节点 （如果报告提示无法滚动很可能是找错节点了，一般而言是table的直接父节点，但实际情况较多）
+- **wait_time** ： 滚动多少时间（ms）
+- **wait_length** ： 滚动直至多少条(tr)数据
+
+！ `wait_time`和 `wait_length` 取交集，即达到规定条数或超出时间都会滚动结束。
 
 ### table_dom
 
 - **Q1: 一个页面有好几个表格**
 
-项目配置项`config.json`支持以数组形式进行多个项目的表格测试/同个项目的多个表格测试。
+项目配置项`config.js`支持以数组形式进行多个项目的表格测试/同个项目的多个表格测试。
 
 需要注意的是，每一个表格对于自动化测试而言是一个独立的项目，原则上每一个表格的配置都是独立的，表格之间没有关联性。如果一个表格依赖于另一个表格的操作（如点击某一行）才出现，且两个表格都需要测试， 那么依然是两段配置，只是其中一个表格的配置的[before](#before)字段需要描述前置操作。
 
-```JSON
+```js
 [
     {
         "url": "",
@@ -169,7 +188,7 @@ table_dom支持以下格式
     }
 ```
 
-**table_cell**是对表格列数据进行验证的，每一列都是用key: value的格式来定义的，key值为表格的每列的表头，value值为一个对象，具体配置见下表：
+**table_cell** 是对表格列数据进行验证的，每一列都是用key: value的格式来定义的，key值为表格的每列的表头，value值为一个对象，具体配置见下表：
 
 | 字段    | 可选值                                      | 含义                                       |
 | ----- | ---------------------------------------- | ---------------------------------------- |
@@ -177,6 +196,7 @@ table_dom支持以下格式
 | color | true/ {fixedColor: "#08a365"}/ {associatedColor: "涨跌幅"} | 验证数值的颜色是否正确（值为true，则表示针对该列每个值的正负来判断该显示红色还是绿色还是默认颜色；值为fixedColor，则会验证该列所有的数据颜色是否都为fixedColor设置的值；值为associatedColor，则表示该列每项数据的颜色都与对应associatedColor列的数据颜色一致，如“现价”的颜色与“涨跌幅”的颜色是一致的） |
 | unit  | true/具体单位（如：元）                           | 验证数值的单位是否正确（值为true，则表示验证“万、亿”的判断；值为具体单位，则表示验证具体单位加“万、亿”的判断） |
 | sort  | true/{wait_time: 1000}（wait_time表示点击后需要等待的时间，单位是毫秒。因为有的排序是请求接口排序的，需要等待接口返回数据） | 验证当前列的排序功能是否正确（会对当前列表头进行两次点击，分别验证升序降序是否排列正确）（值为true，则默认等待时间500ms） |
+| empty | true/'--' | 开启对该列空值检查是否合法，可以指定合法的空值 |
 
 **注：以上字段如果有不需要验证的，则不用填写该字段**
 
