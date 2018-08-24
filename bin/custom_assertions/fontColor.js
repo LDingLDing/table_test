@@ -2,7 +2,13 @@ exports.assertion = function (colDatas, colName, colorType, associatedData) {
   this.message = '验证【' + colName + '】列的颜色----'
   this.expected = function () {}
   this.pass = function (data) {
-    let checkFlag = [];
+    let checkFlag = true
+    let checkText = {
+      failFixed: [],
+      failRed: [],
+      failGreen: [],
+      failDefault: []
+    };
     for (let i in data.colors) {
       i = Number(i)
       let rgb = data.colors[i]
@@ -18,7 +24,8 @@ exports.assertion = function (colDatas, colName, colorType, associatedData) {
           }
         }
         if (!currentColor) {
-          checkFlag.push('第' + (i + 1) + '行的颜色不是' + colorType['fixedColor'] + '；\n')
+          checkFlag = false
+          checkText.failFixed.push(i + 1)
         }
         continue
       }
@@ -35,7 +42,8 @@ exports.assertion = function (colDatas, colName, colorType, associatedData) {
           }
         }
         if (!currentColor) {
-          checkFlag.push('第' + (i + 1) + '行不是红色；\n')
+          checkFlag = false
+          checkText.failRed.push(i + 1)
         }
       } else if (text < 0) {
         for (let j in rgb) {
@@ -45,7 +53,8 @@ exports.assertion = function (colDatas, colName, colorType, associatedData) {
           }
         }
         if (!currentColor) {
-          checkFlag.push('第' + (i + 1) + '行不是绿色；\n')
+          checkFlag = false
+          checkText.failGreen.push(i + 1)
         }
       } else {
         for (let j in rgb) {
@@ -55,15 +64,28 @@ exports.assertion = function (colDatas, colName, colorType, associatedData) {
           }
         }
         if (!currentColor) {
-          checkFlag.push('第' + (i + 1) + '行不是默认色；\n')
+          checkFlag = false
+          checkText.failDefault.push(i + 1)
         }
       }
     }
-    if (checkFlag.length === 0) {
+    if (checkFlag) {
       this.message += '验证通过！'
       return true
     } else {
-      this.message += '验证出错！错误位置：' + checkFlag.join(',')
+      this.message += '验证出错！错误位置：\n'
+      if (checkText.failFixed.length > 0) {
+        this.message += '第' + checkText.failFixed.join('、') + '行的颜色不是' + colorType['fixedColor'] + '；\n'
+      }
+      if (checkText.failRed.length > 0) {
+        this.message += '第' + checkText.failRed.join('、') + '行的颜色不是红色；\n'
+      }
+      if (checkText.failGreen.length > 0) {
+        this.message += '第' + checkText.failGreen.join('、') + '行的颜色不是绿色；\n'
+      }
+      if (checkText.failDefault.length > 0) {
+        this.message += '第' + checkText.failDefault.join('、') + '行的颜色不是默认色；\n'
+      }
       return false
     }
 
