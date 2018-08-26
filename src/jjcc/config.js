@@ -4,7 +4,7 @@ var data = [
         "url": "http://zx.10jqka.com.cn/brokerpositions/holdanalyze/html/index.html#/",
         "table_dom": { "thead_dom": "#mid .hq_table_theadfixed thead", "tbody_dom": "#mid .hq_table_base tbody"},
         "table_cell": {
-            "累计净买入额": { "color": true, "unit": true, "fixed": "2", "sort": { "wait_time": "1000"}},
+            "累计净买入额": { "color": true, "unit": true, "fixed": "2", "sort": { "wait_time": "1000"}, "align": "right"},
             "持仓市值": {"unit": true, "sort": true},
             "盈亏比":{ "fixed": "2", "color": true, "unit": "%", "sort": true},
             "连续增持":{"color": true, "unit": "天", "sort": true},

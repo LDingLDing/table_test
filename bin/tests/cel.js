@@ -27,21 +27,26 @@ function doTest(browser) {
       // 获取每列的数据
       let colData = {
         colors: [],
+        aligns: [],
         texts: []
       }
       for (let i = 0; i < trs.length; i++) {
         let dom = trs[i].children[colIndex]
 
-        let rgb = []
+        let color = []
+        let align = []
         if (dom.childElementCount == 0) {
-          rgb.push(document.defaultView.getComputedStyle(dom, null).color.replace("rgb(", "").replace(")", ""))
+          color.push(document.defaultView.getComputedStyle(dom, null).color.replace("rgb(", "").replace(")", ""))
+          align.push(document.defaultView.getComputedStyle(dom, null).textAlign)
         } else {
-          rgb.push(document.defaultView.getComputedStyle(dom, null).color.replace("rgb(", "").replace(")", ""))
+          // color.push(document.defaultView.getComputedStyle(dom, null).color.replace("rgb(", "").replace(")", ""))
           for (let i = 0; i < dom.childElementCount; i++) {
-            rgb.push(document.defaultView.getComputedStyle(dom.children[i], null).color.replace("rgb(", "").replace(")", ""))
+            color.push(document.defaultView.getComputedStyle(dom.children[i], null).color.replace("rgb(", "").replace(")", ""))
+            align.push(document.defaultView.getComputedStyle(dom.children[i], null).textAlign)
           }
         }
-        colData.colors.push(rgb)
+        colData.colors.push(color)
+        colData.aligns.push(align)
 
         let text = dom.innerText.trim().replace(/\n/g, '')
         colData.texts.push(text)
@@ -90,6 +95,9 @@ function doTest(browser) {
       }
       if (app['table_cell'][colName]['unit'] && app['table_cell'][colName]['unit'] != "false") {
         browser.verify.checkUnit(colData, colName, app['table_cell'][colName]['unit'])
+      }
+      if (app['table_cell'][colName]['align'] && app['table_cell'][colName]['align'] != "false") {
+        browser.verify.checkAlign(colData, colName, app['table_cell'][colName]['align'])
       }
       if (app['table_cell'][colName]['sort'] && app['table_cell'][colName]['sort'] != "false") {
         let theadDom = app['table_dom']['thead_dom'] + ' ' + theadTag + ':nth-child(' + (colIndex + 1) + ')'
