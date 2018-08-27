@@ -92,6 +92,9 @@ node bin/startup.js --conf src/jjcc/config.js
 ```
 
 
+---
+
+
 ### Product Config
 | 字段         | 必填   | 含义                                       |
 | ---------- | ---- | ---------------------------------------- |
@@ -100,6 +103,8 @@ node bin/startup.js --conf src/jjcc/config.js
 | before     |      | 有些表格并不在首屏展示，那么需要描述如何展示出表格，具体见 [before配置](#before) |
 | table_dom  | √    | 表格的唯一节点，如有多个取第一个。有问题见 [table节点](#table_dom) |
 | table_cell |      | 对单元格进行正确性验证，支持`颜色(红涨绿跌)`、`单位`、`小数位`、`排序` ， 具体见 [table_cell配置](#table_cell) |
+
+---
 
 ### before
 
@@ -136,6 +141,8 @@ node bin/startup.js --conf src/jjcc/config.js
 ！ `wait_time`和 `wait_length` 取交集，即达到规定条数或超出时间都会滚动结束。
 
 
+---
+
 ### table_dom
 
 - **Q1: 一个页面有好几个表格**
@@ -159,7 +166,7 @@ node bin/startup.js --conf src/jjcc/config.js
 ]
 ```
 
-- **Q2: 为什么需要thead_dom和tbody_dom两个值**
+- **Q2: 虚拟表格(指行/列固定的表格)下，为什么需要thead_dom和tbody_dom两个值**
 
 table_dom支持以下格式
 ```
@@ -169,10 +176,10 @@ table_dom支持以下格式
 }
 ```
 
-所有表头固定的表格，其实是由**两个表格**组成的，所以需要单独指定thead和tbody
+所有如表头固定的表格，其实是由至少**两个表格**组成的，所以需要单独指定thead和tbody的节点
 
 
-
+---
 
 
 ### table_cell
@@ -202,6 +209,5 @@ table_dom支持以下格式
 | align | left/center/right                        | 验证文本的对齐方式                                |
 
 **注：以上字段如果有不需要验证的，则不用填写该字段**
-
 
 
